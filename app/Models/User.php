@@ -44,8 +44,7 @@ class User extends Authenticatable implements Auditable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'email_verified_at' => 'datetime'
     ];
 
     /**
@@ -66,7 +65,7 @@ class User extends Authenticatable implements Auditable
     public function setImageAttribute($image)
     {
         if ($image) {
-            $this->attributes['image'] = uploadFile($image, 'profile', '45', '45');
+            $this->attributes['image'] = uploadFile($image, 'profile', '100', '100');
         }else {
             unset($this->attributes['image']);
         }

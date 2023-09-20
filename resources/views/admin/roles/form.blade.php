@@ -16,7 +16,8 @@
                             <div class="col-md-6">
                                 <label class="form-check mb-2">
                                     <input 
-                                        type="checkbox" 
+                                        type="checkbox"
+                                        required="required" 
                                         class="form-check-input form-check-input-secondary" 
                                         name="permission[]" 
                                         value="{{ $permission['id'] }}" 

@@ -21,12 +21,18 @@ Route::resource('roles', RoleController::class);
 | User Routes
 |--------------------------------------------------------------------------
 */
-Route::resource('users', UserController::class);
-Route::controller(UserController::class)->prefix('user')->group(function () {
-	Route::get('profile', 		 'profileEdit'	)->name('user.profile.edit');
-    Route::post('profile',		 'profileUpdate')->name('user.profile.update');
-    Route::post('check_email', 	 'checkEmail'	)->name('user.checkEmail');
-    Route::post('check_password','checkPassword')->name('user.checkPassword');
+Route::controller(UserController::class)->prefix('users')->as('users.')->group(function () {
+	Route::get('list',				'index'			)->name('index'		   );
+	Route::get('create',			'create'		)->name('create'	   );
+	Route::post('store',			'store'			)->name('store'		   );
+	Route::get('edit/{id}',			'edit'			)->name('edit'		   );
+	Route::get('show/{id}',			'show'			)->name('show'		   );
+	Route::patch('update/{user}',	'update'		)->name('update'	   );
+	Route::delete('delete/{id}',	'destroy'		)->name('destroy'	   );
+	Route::get('profile', 		 	'profileEdit'	)->name('profileEdit'  );
+    Route::post('profile',		 	'profileUpdate'	)->name('profileUpdate');
+    Route::post('check_email', 	 	'checkEmail'	)->name('checkEmail'   );
+    Route::post('check_password',	'checkPassword'	)->name('checkPassword');
 });
 
 /*
@@ -45,7 +51,7 @@ Route::controller(NotificationController::class)->prefix('notifications')->as('n
 | Audit Routes
 |--------------------------------------------------------------------------
 */
-Route::controller(AuditController::class)->prefix('audits')->as('audit.')->group(function () {
+Route::controller(AuditController::class)->prefix('audits')->as('audits.')->group(function () {
 	Route::get('index', 		 	'index'	 )->name('index'  );
 	Route::get('show/{id}', 	 	'show'	 )->name('show'	  );
 	Route::delete('destroy/{id}',	'destroy')->name('destroy');

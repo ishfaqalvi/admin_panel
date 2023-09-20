@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
       */
       public function run()
       {
-            $permissions = [
+            $permissions = [ 
                   'roles-list', 
                   'roles-view', 
                   'roles-create', 
@@ -28,23 +28,23 @@ class PermissionSeeder extends Seeder
                   'users-edit', 
                   'users-delete',
 
-                  'strings-list', 
-                  'strings-view', 
-                  'strings-create', 
-                  'strings-edit', 
-                  'strings-delete',
+                  'notifications-list', 
+                  'notifications-view', 
+                  'notifications-create', 
+                  'notifications-edit', 
+                  'notifications-delete',
 
-                  'audit-list', 
-                  'audit-view', 
-                  'audit-create', 
-                  'audit-edit', 
-                  'audit-delete',
+                  'audits-list', 
+                  'audits-view', 
+                  'audits-create', 
+                  'audits-edit', 
+                  'audits-delete',
 
-                  'log-list', 
-                  'log-view', 
-                  'log-create', 
-                  'log-edit', 
-                  'log-delete',
+                  'logs-list', 
+                  'logs-view', 
+                  'logs-create', 
+                  'logs-edit', 
+                  'logs-delete',
 
                   'settings-list',
                   'settings-create',

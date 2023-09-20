@@ -2,28 +2,32 @@
 
 @section('title','Show User')
 
-@section('breadcrumb')
-<div class="col-md-5 align-self-center">
-    <h4 class="text-themecolor">Show User</h4>
-</div>
-<div class="col-md-7 align-self-center text-end">
-    <div class="d-flex justify-content-end align-items-center">
-        <ol class="breadcrumb justify-content-end">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('users.index') }}">User</a></li>
-            <li class="breadcrumb-item active">Show</li>
-        </ol>
-        <a href="{{ route('users.index') }}" type="button" class="btn btn-info d-none d-lg-block m-l-15 text-white">
-            <i class="fas fa-arrow-left"></i> {{ __('Back') }} 
-        </a>
+@section('header')
+<div class="page-header-content d-lg-flex">
+    <div class="d-flex">
+        <h4 class="page-title mb-0">
+            Home - <span class="fw-normal">User Managment</span>
+        </h4>
+    </div>
+    <div class="d-lg-block my-lg-auto ms-lg-auto">
+        <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
+            <a href="{{ route('users.index') }}" class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill">
+                <span class="btn-labeled-icon bg-primary text-white rounded-pill">
+                    <i class="ph-arrow-circle-left"></i>
+                </span>
+                Back
+            </a>
+        </div>
     </div>
 </div>
 @endsection
 
 @section('content')
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">Show User</h4>
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">{{ __('Show User') }}</h5>
+        </div>
         <div class="card-body d-flex justify-content-around">
             <div class="form-group">
                 <img class="rounded-2" src="{{ asset($user->image) }}" width="200px"/>

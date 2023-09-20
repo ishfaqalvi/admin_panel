@@ -60,13 +60,14 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'          => 'required|unique:roles,name',
-            'permission'   => 'required',
+            'name'       => 'required|unique:roles,name',
+            'permission' => 'required',
         ]);
         $role = Role::create(['name' => $request->input('name'),'guard_name'=>'web']);
         $role->syncPermissions($request->get('permission'));
         return redirect()->route('roles.index')->with('success','Role created successfully');
     }
+
     /**
      * Display the specified resource.
      *
@@ -114,8 +115,8 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
+            'name'      => 'required',
+            'permission'=> 'required',
         ]);
     
         $role->name = $request->input('name');
@@ -125,6 +126,7 @@ class RoleController extends Controller
     
         return redirect()->route('roles.index')->with('success','Role updated successfully');
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -133,7 +135,11 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id)->delete();
+        $role = Role::find($id);
+        if (count(Role::get()) == 1 && $role->id == 1) {
+            return redirect()->back()->with('warning','You cannot delete the last role.');
+        }
+        $role->delete();
         return redirect()->route('roles.index')->with('success','Role deleted successfully');
     }
 }

@@ -129,7 +129,7 @@
                 <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->name }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
-                <a href="#" class="dropdown-item">
+                <a href="{{ route('users.profileEdit') }}" class="dropdown-item">
                     <i class="ph-user-circle me-2"></i>
                     My profile
                 </a>

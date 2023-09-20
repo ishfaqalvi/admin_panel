@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
     
-use Illuminate\Http\Request;
-use App\Models\User;
 use Spatie\Permission\Models\Role;
-use DB;
-use Hash;
-use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use App\Models\User;
+use Auth;
+use DB;
     
 class UserController extends Controller
 {
@@ -67,9 +66,7 @@ class UserController extends Controller
             'roles'             => 'required'
         ]);
     
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $user = User::create($input);
+        $user = User::create($request->all());
         $user->assignRole($request->input('roles'));
     
         return redirect()->route('users.index')->with('success','User created successfully');
@@ -109,25 +106,22 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
+            'name'      => 'required',
+            'email'     => 'required|email|unique:users,email,'.$user->id,
+            'password'  => 'same:confirm-password',
+            'roles'     => 'required'
         ]);
     
         $input = $request->all();
-        if(!empty($input['password'])){ 
-            $input['password'] = Hash::make($input['password']);
-        }else{
+        if(empty($input['password'])){
             $input = Arr::except($input,array('password'));    
         }
     
-        $user = User::find($id);
         $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
+        DB::table('model_has_roles')->where('model_id',$user->id)->delete();
     
         $user->assignRole($request->input('roles'));
     
@@ -142,7 +136,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+        if ($user->id == 1 || auth()->user()->id ==  $id) {
+            return redirect()->back()->with('warning','You cannot delete this user.');    
+        }
+        $user->delete();
         return redirect()->route('users.index')->with('success','User deleted successfully');
     }
 
@@ -152,7 +150,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function profileedit()
+    public function profileEdit()
     {
         return view('admin.users.profile');
     }
@@ -168,7 +166,7 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name'              => 'required',
-            'email'             => 'required|email|unique:users,email,' . Auth::user()->id,
+            'email'             => 'required|email|unique:users,email,' . auth()->user()->id,
             'old_password'      => 'nullable|required_with:new_password',
             'new_password'      => 'nullable|min:8|max:12',
             'confirm_password'  => 'nullable|min:8|max:12|required_with:new_password|same:new_password'
@@ -176,21 +174,10 @@ class UserController extends Controller
 
         $input = $request->all();
 
-        if (!empty($input['new_password'])) {
-            $input['password'] = Hash::make($input['new_password']);
-        }else {
+        if (empty($input['new_password'])) {
             $input = Arr::except($input, array('password'));
         }
-        if($image = $request->file('image')){
-            $filename = time().'.'.$image->getClientOriginalExtension();
-            $image->move('upload/images/profile/', $filename);
-            $name = "upload/images/profile/".$filename;
-            $input['image'] = $name;
-        }
-        else{
-            unset($input['image']);
-        }
-        Auth()->user()->update($input);
+        auth()->user()->update($input);
         
         return redirect()->back()->with('success', 'Profile updated successfully');
     }

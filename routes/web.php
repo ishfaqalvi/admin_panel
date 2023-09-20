@@ -26,4 +26,4 @@ Auth::routes();
 | Dynamic Pages Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/' [DynamicPageController::class, 'viewHomePage']);
+Route::get('/', [DynamicPageController::class, 'viewHomePage']);

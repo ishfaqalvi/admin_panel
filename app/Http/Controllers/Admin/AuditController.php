@@ -15,11 +15,11 @@ class AuditController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:audit-list',  ['only' => ['index']]);
-        $this->middleware('permission:audit-view',  ['only' => ['show']]);
-        $this->middleware('permission:audit-create',['only' => ['create','store']]);
-        $this->middleware('permission:audit-edit',  ['only' => ['edit','update']]);
-        $this->middleware('permission:audit-delete',['only' => ['destroy']]);
+        $this->middleware('permission:audits-list',  ['only' => ['index']]);
+        $this->middleware('permission:audits-view',  ['only' => ['show']]);
+        $this->middleware('permission:audits-create',['only' => ['create','store']]);
+        $this->middleware('permission:audits-edit',  ['only' => ['edit','update']]);
+        $this->middleware('permission:audits-delete',['only' => ['destroy']]);
     }
 
 	/**
@@ -56,7 +56,7 @@ class AuditController extends Controller
     {
         $audit = Audit::find($id)->delete();
 
-        return redirect()->route('audit.index')
-            ->with('success', 'Audit deleted successfully');
+        return redirect()->route('audits.index')
+            ->with('success', 'Audit deleted successfully.');
     }
 }

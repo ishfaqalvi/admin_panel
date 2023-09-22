@@ -1,141 +1,150 @@
 @extends('admin.layout.app')
 
-@section('title','Settings')
-    
-@section('breadcrumb')
-<div class="col-md-5 align-self-center">
-    <h4 class="text-themecolor">Settings</h4>
-</div>
-<div class="col-md-7 align-self-center text-end">
-    <div class="d-flex justify-content-end align-items-center">
-        <ol class="breadcrumb justify-content-end">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active">Settings</li>
-        </ol>
+@section('title', 'Settings')
+
+@section('header')
+    <div class="page-header-content d-lg-flex">
+        <div class="d-flex">
+            <h4 class="page-title mb-0">
+                Home - <span class="fw-normal">Settings</span>
+            </h4>
+        </div>
+        {{-- @can('users-create') --}}
+        <div class="d-lg-block my-lg-auto ms-lg-auto">
+            <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
+                <button class="btn btn-outline-primary btn-labeled btn-labeled-start rounded-pill" data-bs-toggle="modal"
+                    data-bs-target="#modal_default">
+                    <span class="btn-labeled-icon bg-primary text-white rounded-pill">
+                        <i class="ph-plus"></i>
+                    </span>
+                    Create Setting Fields
+                </button>
+            </div>
+        </div>
+        {{-- @endcan --}}
     </div>
-</div>
 @endsection
 
 @section('content')
-<div class="card">
-    <div class="card-header bg-info">
-        <h4 class="m-b-0 text-white">Website General Settings</h4>
-    </div>
-    <div class="card-body">
-        <form method="POST" action="{{ route('settings.save') }}" class="form-horizontal form-bordered" role="form" enctype="multipart/form-data">
-            @csrf
-            <div class="form-body">
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Website Header Logo</label>
-                    <div class="col-md-4">
-                        {{ Form::file('header_logo', ['class' => 'form-control', settings('header_logo') ? '' :'']) }}
-                        <img src="{{ asset(settings('header_logo')) }}">
-                    </div>
-                    <label class="control-label text-end col-md-2">Website Footer Logo</label>
-                    <div class="col-md-4">
-                        {{ Form::file('footer_logo', ['class' => 'form-control', settings('footer_logo') ? '' :'']) }}
-                        <img src="{{ asset(settings('footer_logo')) }}">
-                    </div>
-                    <label class="control-label mt-2 text-end col-md-2">Website Page Title Icon</label>
-                    <div class="col-md-4 mt-2">
-                        {{ Form::file('page_title_icon', ['class' => 'form-control', settings('page_title_icon') ? '' :'']) }}
-                        <img src="{{ asset(settings('page_title_icon')) }}">
-                    </div>
+
+
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-tabs-highlight" role="tablist">
+
+                    @foreach ($groups as $group)
+                        <li class="nav-item" role="presentation">
+                            <a href="#{{ $group->title }}-tab{{ $group->id }}"
+                                class="nav-link {{ $loop->first ? 'active' : '' }}" data-bs-toggle="tab"
+                                aria-selected="true" role="tab">
+                                {{-- <i class="ph-user-circle me-2"></i> --}}
+                                {{ $group->title }}
+                            </a>
+                        </li>
+                    @endforeach
+
+
+                </ul>
+
+                <div class="tab-content flex-lg-fill">
+
+                    @include('admin.settings.form')
+
                 </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Bazzigate Website Url</label>
-                    <div class="col-md-4">
-                        {{ Form::url('values[bazigate_website_url]', settings('bazigate_website_url'), ['class' => 'form-control']) }}
-                    </div>
-                    <label class="control-label mt-2 text-end col-md-2">Facebook Link</label>
-                    <div class="col-md-4 mt-2">
-                        {{ Form::url('values[facebook_link]', settings('facebook_link'), ['class' => 'form-control']) }}
-                    </div>
-                    <label class="control-label mt-2 text-end col-md-2">Twitter Link</label>
-                    <div class="col-md-4 mt-2">
-                        {{ Form::url('values[twitter_link]', settings('twitter_link'), ['class' => 'form-control']) }}
-                    </div>
-                    <label class="control-label  mt-2 text-end col-md-2">Instagram Link</label>
-                    <div class="col-md-4 mt-2">
-                        {{ Form::url('values[instagram_link]', settings('instagram_link'), ['class' => 'form-control']) }}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">App Store Link</label>
-                    <div class="col-md-4">
-                        {{ Form::url('values[app_store_link]', settings('app_store_link'), ['class' => 'form-control']) }}
-                    </div>
-                    <label class="control-label mt-2 text-end col-md-2">Play Store Link</label>
-                    <div class="col-md-4 mt-2">
-                        {{ Form::url('values[playstore_link]', settings('playstore_link'), ['class' => 'form-control']) }}
-                    </div>
-                    <label class="control-label mt-2 text-end col-md-2">Copyright Link</label>
-                    <div class="col-md-4 mt-2">
-                        {{ Form::url('values[copyright_link]', settings('copyright_link'), ['class' => 'form-control']) }}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Google Search Console Code</label>
-                    <div class="col-md-10">
-                        {{ Form::textarea('values[google_search_console_code]', settings('google_search_console_code'), ['class' => 'form-control','rows'=>'4']) }}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Google Analytics Code</label>
-                    <div class="col-md-10">
-                        {{ Form::textarea('values[google_analytics_code]', settings('google_analytics_code'), ['class' => 'form-control','rows'=>'4']) }}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Clarity Code</label>
-                    <div class="col-md-10">
-                        {{ Form::textarea('values[clarity_code]', settings('clarity_code'), ['class' => 'form-control','rows'=>'4']) }}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Nocaptcha Secret Key</label>
-                    <div class="col-md-10">
-                        {{ Form::text('values[nocaptcha_secret_key]', settings('nocaptcha_secret_key'), ['class' => 'form-control']) }}
-                    </div>
-                    <label class="control-label text-end col-md-2">Nocaptcha Site Key</label>
-                    <div class="col-md-10">
-                        {{ Form::text('values[nocaptcha_site_key]', settings('nocaptcha_site_key'), ['class' => 'form-control']) }}
-                    </div>
-                </div>
-                <div class="form-group row gy-3">
-                    <label class="control-label text-end col-md-2">Job Application Message</label>
-                    <div class="col-md-10">
-                        {{ Form::text('values[job_application_message]', settings('job_application_message'), ['class' => 'form-control']) }}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Contact Us Message</label>
-                    <div class="col-md-10">
-                        {{ Form::text('values[contact_us_message]', settings('contact_us_message'), ['class' => 'form-control']) }}
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-end col-md-2">Feadback Message</label>
-                    <div class="col-md-10">
-                        {{ Form::text('values[feadback_message]', settings('feadback_message'), ['class' => 'form-control']) }}
-                    </div>
-                </div>
+
             </div>
-            @can('settings-create')
-            <div class="form-actions">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="offset-sm-3 col-md-9">
-                                <button type="submit" class="btn btn-success text-white"> <i class="fa fa-check"></i> Submit</button>
-                                <button type="button" class="btn btn-inverse">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endcan
-        </form>
+        </div>
     </div>
-</div>
+
+    @include('admin.settings.create-field')
+
+@endsection
+
+@section('script')
+    <script>
+        $(function() {
+
+            $('#type').on('change', function() {
+                const selectedValue = $(this).val();
+                const optionsDiv = $('#options-div');
+                const optionsInput = $("#options");
+                const placeholderInput = $("#placeholder");
+                const editorDiv = $("#editor-div");
+                const editorInput = $("#editor");
+
+                optionsDiv.toggleClass('d-none', selectedValue != 'select');
+                optionsInput.prop("disabled", selectedValue != 'select');
+                editorDiv.toggleClass('d-none', selectedValue != 'textarea');
+                editorInput.prop("disabled", selectedValue != 'textarea');
+
+                placeholderInput.prop("disabled", selectedValue === 'select' || selectedValue ===
+                    'textarea' || selectedValue === 'file' || selectedValue === 'number');
+
+            });
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                }
+            });
+            $('.delete-btn').on('click', function() {
+                let id = $(this).data("id");
+                $.ajax({
+                    url: "fields" + '/' + id,
+                    type: "DELETE",
+                    success: function(data) {
+                        // Handle the data (e.g., update the DOM)
+                        if (data.success) {
+                            location.reload();
+                        }
+                    },
+                    error: function(error) {
+                        // Handle errors
+                        console.error(error);
+                    },
+                });
+            });
+
+            jQuery.validator.addMethod("noSpace", function(value, element) {
+                return value.indexOf(" ") < 0 && value != "" && value.match(/^[a-z_]+$/);;
+            }, "Only use small letter seprated with _");
+
+            $('.validate').validate({
+                errorClass: 'validation-invalid-label',
+                successClass: 'validation-valid-label',
+                validClass: 'validation-valid-label',
+                highlight: function(element, errorClass) {
+                    $(element).removeClass(errorClass);
+                    $(element).addClass('is-invalid');
+                    $(element).removeClass('is-valid');
+                },
+                unhighlight: function(element, errorClass) {
+                    $(element).removeClass(errorClass);
+                    $(element).removeClass('is-invalid');
+                    $(element).addClass('is-valid');
+                },
+                success: function(label) {
+                    label.addClass('validation-valid-label').text('Success.');
+                },
+                errorPlacement: function(error, element) {
+                    if (element.hasClass('select2-hidden-accessible')) {
+                        error.appendTo(element.parent());
+                    } else if (element.parents().hasClass('form-control-feedback') || element
+                        .parents().hasClass('form-check') || element.parents().hasClass(
+                            'input-group')) {
+                        error.appendTo(element.parent().parent());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                rules: {
+                    name: {
+                        noSpace: true
+                    }
+                }
+            });
+        })
+    </script>
 @endsection

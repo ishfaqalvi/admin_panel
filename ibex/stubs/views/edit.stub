@@ -1,4 +1,4 @@
-@extends('{{layout}}')
+@extends('admin.layout.app')
 
 @section('title')
     {{ __('Update') }} {{modelTitle}}
@@ -43,7 +43,6 @@
 
 @section('script')
 <script>
-    var id = {{ ${{modelNameLowerCase}}->id }};
     $(function(){
         $('.validate').validate({
             errorClass: 'validation-invalid-label',

@@ -1,6 +1,7 @@
 <?php
 
-namespace {{controllerNamespace}};
+namespace {{controllerNamespace}}\Admin;
+use App\Http\Controllers\Controller;
 
 use {{modelNamespace}}\{{modelName}};
 use Illuminate\Http\Request;
@@ -16,12 +17,25 @@ class {{modelName}}Controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:{{modelNamePluralLowerCase}}-list',  ['only' => ['index']]);
+        $this->middleware('permission:{{modelNamePluralLowerCase}}-view',  ['only' => ['show']]);
+        $this->middleware('permission:{{modelNamePluralLowerCase}}-create',['only' => ['create','store']]);
+        $this->middleware('permission:{{modelNamePluralLowerCase}}-edit',  ['only' => ['edit','update']]);
+        $this->middleware('permission:{{modelNamePluralLowerCase}}-delete',['only' => ['destroy']]);
+    }
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        ${{modelNamePluralLowerCase}} = {{modelName}}::paginate();
+        ${{modelNamePluralLowerCase}} = {{modelName}}::get();
 
-        return view('{{modelView}}.index', compact('{{modelNamePluralLowerCase}}'))
-            ->with('i', (request()->input('page', 1) - 1) * ${{modelNamePluralLowerCase}}->perPage());
+        return view('admin.{{modelView}}.index', compact('{{modelNamePluralLowerCase}}'));
     }
 
     /**
@@ -32,7 +46,7 @@ class {{modelName}}Controller extends Controller
     public function create()
     {
         ${{modelNameLowerCase}} = new {{modelName}}();
-        return view('{{modelView}}.create', compact('{{modelNameLowerCase}}'));
+        return view('admin.{{modelView}}.create', compact('{{modelNameLowerCase}}'));
     }
 
     /**
@@ -61,7 +75,7 @@ class {{modelName}}Controller extends Controller
     {
         ${{modelNameLowerCase}} = {{modelName}}::find($id);
 
-        return view('{{modelView}}.show', compact('{{modelNameLowerCase}}'));
+        return view('admin.{{modelView}}.show', compact('{{modelNameLowerCase}}'));
     }
 
     /**
@@ -74,7 +88,7 @@ class {{modelName}}Controller extends Controller
     {
         ${{modelNameLowerCase}} = {{modelName}}::find($id);
 
-        return view('{{modelView}}.edit', compact('{{modelNameLowerCase}}'));
+        return view('admin.{{modelView}}.edit', compact('{{modelNameLowerCase}}'));
     }
 
     /**

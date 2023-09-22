@@ -1,4 +1,4 @@
-@extends('{{layout}}')
+@extends('admin.layout.app')
 
 @section('title')
     {{ ${{modelNameLowerCase}}->name ?? "{{ __('Show') {{modelTitle}}" }}

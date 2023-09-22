@@ -25,7 +25,7 @@ class {{modelName}}Controller extends Controller
         $this->middleware('permission:{{modelNamePluralLowerCase}}-edit',  ['only' => ['edit','update']]);
         $this->middleware('permission:{{modelNamePluralLowerCase}}-delete',['only' => ['destroy']]);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -57,10 +57,7 @@ class {{modelName}}Controller extends Controller
      */
     public function store(Request $request)
     {
-        request()->validate({{modelName}}::$rules);
-
-        ${{modelNameLowerCase}} = {{modelName}}::create($request->all());
-
+       ${{modelNameLowerCase}} = {{modelName}}::create($request->all());
         return redirect()->route('{{modelRoute}}.index')
             ->with('success', '{{modelName}} created successfully.');
     }
@@ -100,8 +97,6 @@ class {{modelName}}Controller extends Controller
      */
     public function update(Request $request, {{modelName}} ${{modelNameLowerCase}})
     {
-        request()->validate({{modelName}}::$rules);
-
         ${{modelNameLowerCase}}->update($request->all());
 
         return redirect()->route('{{modelRoute}}.index')

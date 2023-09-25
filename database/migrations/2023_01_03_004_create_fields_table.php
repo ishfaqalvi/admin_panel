@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('setting_fields', function (Blueprint $table) {
+        Schema::create('fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('setting_field_group_id')->constrained()->cascadeOnDelete();
-            $table->enum('type', ['text', 'number', 'email', 'file', 'select', 'textarea'])->nullable();
-            $table->string('name')->nullable();
+            $table->foreignId('field_group_id')->constrained()->cascadeOnDelete();
+            $table->enum('type', ['text', 'number', 'email', 'file', 'select', 'textarea']);
+            $table->string('name');
             $table->string('placeholder')->nullable();
             $table->string('label')->nullable();
             $table->text('options')->nullable();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('setting_fields');
+        Schema::dropIfExists('fields');
     }
 };

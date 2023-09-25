@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use App\Models\Setting;
-use App\Models\SettingField;
-use App\Models\SettingFieldGroup;
+use App\Models\Field;
+use App\Models\FieldGroup;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -35,7 +35,7 @@ class SettingController extends Controller
      */
     public function index(Request $request): View
     {
-        $groups = SettingFieldGroup::with('fields')->get();
+        $groups = FieldGroup::with('fields')->get();
         return view('admin.settings.index', compact('groups'));
     }
 
@@ -97,10 +97,10 @@ class SettingController extends Controller
         $request->validate([
             'name' => 'required',
             'type' => 'required',
-            'setting_field_group_id' => 'required',
+            'field_group_id' => 'required',
         ]);
 
-        SettingField::create($request->all());
+        Field::create($request->all());
         return redirect()->route('settings.index')->with('success', 'Field created successfully');
     }
 
@@ -112,7 +112,7 @@ class SettingController extends Controller
      */
     public function destroyField($id): JsonResponse
     {
-        SettingField::find($id)->delete();
+        Field::find($id)->delete();
         return response()->json([
             'success' => true,
             'message' => "Field deleted successfully.",
@@ -131,7 +131,7 @@ class SettingController extends Controller
             'title' => 'required',
         ]);
 
-        SettingFieldGroup::create($request->all());
+        FieldGroup::create($request->all());
         return response()->json([
             'success' => true,
             'message' => "Group created successfully.",

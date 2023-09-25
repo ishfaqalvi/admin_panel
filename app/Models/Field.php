@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SettingField extends Model
+class Field extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'setting_field_group_id', 'type', 'name', 'label', 'placeholder', 'options', 'is_required'
+        'field_group_id', 'type', 'name', 'label', 'placeholder', 'options', 'is_required'
     ];
 
 
@@ -21,6 +21,6 @@ class SettingField extends Model
     }
 
     public function group() : BelongsTo {
-        return $this->belongsTo(SettingFieldGroup::class, 'setting_field_group_id');
+        return $this->belongsTo(FieldGroup::class, 'field_group_id');
     }
 }

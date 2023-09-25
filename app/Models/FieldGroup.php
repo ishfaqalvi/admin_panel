@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class SettingFieldGroup extends Model
+class FieldGroup extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -14,6 +14,6 @@ class SettingFieldGroup extends Model
     ];
 
     public function fields() : HasMany {
-        return $this->hasMany(SettingField::class, 'setting_field_group_id');
+        return $this->hasMany(Field::class, 'field_group_id');
     }
 }

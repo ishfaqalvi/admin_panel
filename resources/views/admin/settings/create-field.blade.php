@@ -15,7 +15,7 @@
 
                         <div class="form-group col-md-6">
                             <label for="setting_field_group_id">Group</label>
-                            <select name="setting_field_group_id" id="setting_field_group_id"
+                            <select name="field_group_id" id="setting_field_group_id"
                                 class="form-control select" required>
                                 @forelse ($groups as $group)
                                     <option value="{{ $group->id }}">{{ $group->title }}</option>

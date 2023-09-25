@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('setting_field_groups', function (Blueprint $table) {
+        Schema::create('field_groups', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('setting_field_groups');
+        Schema::dropIfExists('field_groups');
     }
 };

@@ -14,6 +14,12 @@ class SettingField extends Model
         'setting_field_group_id', 'type', 'name', 'label', 'placeholder', 'options', 'is_required'
     ];
 
+
+    public function getFieldNameAttribute()
+    {
+        return strtolower($this->group()->first()->title)."_".$this->name;
+    }
+
     public function group() : BelongsTo {
         return $this->belongsTo(SettingFieldGroup::class, 'setting_field_group_id');
     }

@@ -118,4 +118,24 @@ class SettingController extends Controller
             'message' => "Field deleted successfully.",
         ]);
     }
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createGroup(Request $request): JsonResponse
+    {
+        $request->validate([
+            'title' => 'required',
+        ]);
+
+        SettingFieldGroup::create($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => "Group created successfully.",
+        ]);
+    }
+
 }

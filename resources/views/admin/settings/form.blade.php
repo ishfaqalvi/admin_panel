@@ -15,26 +15,25 @@
                     <div class="col-lg-8">
 
                         @if ($field->type == 'select')
-                            <select class="form-control form-select" name="{{ $group->title . '_' . $field->name }}"
+                            <select class="form-control form-select" name="values[{{ $field->field_name }}]"
                                 placeholder="{{ $field->placeholder }}" {{ $field->is_required ? 'required' : '' }}>
                                 @foreach (explode(',', $field->options) as $option)
                                     <option>{{ $option }}</option>
                                 @endforeach
                             </select>
                         @elseif ($field->type == 'textarea')
-                            <textarea class="form-control" name="{{ $group->title . '_' . $field->name }}">{{ settings($group->title . '_' . $field->name) }}</textarea>
+                            <textarea class="form-control" name="values[{{ $field->field_name }}]">{{ settings($group->title . '_' . $field->name) }}</textarea>
                         @else
                             <input type="{{ $field->type }}" class="form-control"
-                                name="{{ $group->title . '_' . $field->name }}"
-                                placeholder="{{ $field->placeholder }}"
-                                value="{{ settings($group->title . '_' . $field->name) }}"
+                                name="values[{{ $field->field_name }}]" placeholder="{{ $field->placeholder }}"
+                                value="{{ settings($field->field_name) }}"
                                 {{ $field->is_required ? 'required' : '' }}>
                         @endif
                     </div>
 
                     <div class="col-lg-2 text-center">
-                        <button type="button" class="btn btn-danger delete-btn" data-id="{{ $field->id }}">Delete Field <i
-                                class="ph-trash ms-2"></i></button>
+                        <button type="button" class="btn btn-danger delete-btn" data-id="{{ $field->id }}">Delete
+                            Field <i class="ph-trash ms-2"></i></button>
                     </div>
 
 

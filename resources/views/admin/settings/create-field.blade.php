@@ -1,4 +1,4 @@
-<div id="modal_default" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+<div id="modal_default" class="modal fade modal-lg" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,12 +16,13 @@
                         <div class="form-group col-md-6">
                             <label for="setting_field_group_id">Group</label>
                             <select name="setting_field_group_id" id="setting_field_group_id"
-                                class="form-control form-select" required>
+                                class="form-control select" required>
                                 @forelse ($groups as $group)
                                     <option value="{{ $group->id }}">{{ $group->title }}</option>
                                 @empty
                                     <option>No Group</option>
                                 @endforelse
+                                <option value="NEW">Add new Group</option>
                             </select>
                         </div>
 

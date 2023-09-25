@@ -63,8 +63,48 @@
 @endsection
 
 @section('script')
+    <link rel="stylesheet" href="{{ asset('assets/js/vendor/tagify/tagify.css') }}">
+    <script src="{{ asset('assets/js/vendor/tagify/tagify.js') }}"></script>
     <script>
         $(function() {
+            const tagifyBasicEl = document.querySelector('#options');
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                }
+            });
+
+            $(".select").select2({
+                dropdownParent: $("#modal_default"),
+                placeholder: 'Select type',
+
+            }).on('select2:close', function() {
+                var el = $(this);
+                if (el.val() === "NEW") {
+                    let newval = prompt("Enter new value: ");
+                    if (newval !== null) {
+                        $.ajax({
+                            url: "add-group",
+                            method: "POST",
+                            data: {
+                                title: newval,
+                            },
+                            success: function(data) {
+                                // Handle the data (e.g., update the DOM)
+                                if (data.success) {
+                                    el.append('<option>' + newval + '</option>')
+                                        .val(newval);
+                                }
+                            },
+                            error: function(error) {
+                                // Handle errors
+                                console.error(error);
+                            },
+                        });
+                    }
+                }
+            });
 
             $('#type').on('change', function() {
                 const selectedValue = $(this).val();
@@ -82,13 +122,14 @@
                 placeholderInput.prop("disabled", selectedValue === 'select' || selectedValue ===
                     'textarea' || selectedValue === 'file' || selectedValue === 'number');
 
+                if (selectedValue === 'select') {
+                    const TagifyBasic = new Tagify(tagifyBasicEl);
+                }
+
             });
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                }
-            });
+            $('.select').val(null).trigger('change');
+
             $('.delete-btn').on('click', function() {
                 let id = $(this).data("id");
                 $.ajax({

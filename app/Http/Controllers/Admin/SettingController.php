@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use App\Models\SettingField;
+use App\Models\SettingFieldGroup;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Image;
 
 
@@ -18,8 +24,8 @@ class SettingController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:tool-list',  ['only' => ['index']]);
-        $this->middleware('permission:tool-create',['only' => ['create','save']]);
+        // $this->middleware('permission:tool-list',  ['only' => ['index']]);
+        // $this->middleware('permission:tool-create',['only' => ['create','save']]);
     }
 
     /**
@@ -27,9 +33,10 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        return view('admin.settings.index');
+        $groups = SettingFieldGroup::with('fields')->get();
+        return view('admin.settings.index', compact('groups'));
     }
 
     /**
@@ -37,7 +44,7 @@ class SettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function clearCache()
+    public function clearCache(): RedirectResponse
     {
         Artisan::call('optimize');
         Artisan::call('cache:clear');
@@ -51,23 +58,22 @@ class SettingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function save(Request $request)
+    public function save(Request $request): RedirectResponse
     {
         $data = array();
         if ($request->values) {
-            foreach($_POST['values'] as $key => $value){
+            foreach ($_POST['values'] as $key => $value) {
                 $data[] = array(
                     'key'   => $key,
                     'value' => $value
                 );
             }
         }
-        foreach($request->file() as $key => $file){
-            if ($image = $request->file($key)) 
-            {
+        foreach ($request->file() as $key => $file) {
+            if ($image = $request->file($key)) {
                 $filenamewithextension = $image->getClientOriginalName();
                 $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-                $filenametostore = 'upload/images/settings/'.$filename.'_'.time().'.webp';
+                $filenametostore = 'upload/images/settings/' . $filename . '_' . time() . '.webp';
                 // $img = Image::make($image)->encode('webp', 90)->resize(100 , 200)->save(public_path($filenametostore));
                 $img = Image::make($image)->encode('webp', 90)->save(public_path($filenametostore));
             }
@@ -79,4 +85,57 @@ class SettingController extends Controller
         Setting::set($data);
         return redirect()->back()->with('success', 'Setting updated successfully.');
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createField(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required',
+            'type' => 'required',
+            'setting_field_group_id' => 'required',
+        ]);
+
+        SettingField::create($request->all());
+        return redirect()->route('settings.index')->with('success', 'Field created successfully');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyField($id): JsonResponse
+    {
+        SettingField::find($id)->delete();
+        return response()->json([
+            'success' => true,
+            'message' => "Field deleted successfully.",
+        ]);
+    }
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createGroup(Request $request): JsonResponse
+    {
+        $request->validate([
+            'title' => 'required',
+        ]);
+
+        SettingFieldGroup::create($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => "Group created successfully.",
+        ]);
+    }
+
 }

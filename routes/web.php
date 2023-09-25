@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Public\DynamicPageController;
+use App\Http\Controllers\Website\DynamicPageController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ use App\Http\Controllers\Public\DynamicPageController;
 | Auth Routes
 |--------------------------------------------------------------------------
 */
+
 Auth::routes();
 
 /*

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SettingFieldController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,9 +64,12 @@ Route::controller(AuditController::class)->prefix('audits')->as('audits.')->grou
 |--------------------------------------------------------------------------
 */
 Route::controller(SettingController::class)->prefix('settings')->as('settings.')->group(function () {
-	Route::get('index', 		'index'		)->name('index'		 );
-	Route::get('clear-cache', 	'clearCache')->name('clear-cache');
-	Route::post('save', 		'save'		)->name('save'		 );
+	Route::get('index', 		'index'		)->name('index'		  );
+	Route::get('clear-cache', 	'clearCache')->name('clear-cache' );
+	Route::post('save', 		'save'		)->name('save'		  );
+	Route::post('add-group', 	   'createGroup')->name('create-group');
+	Route::post('fields', 	   'createField')->name('create-field');
+	Route::delete('fields/{id}', 	  'destroyField')->name('delete-field');
 });
 
 /*
@@ -73,6 +77,6 @@ Route::controller(SettingController::class)->prefix('settings')->as('settings.')
 | Error Log Route
 |--------------------------------------------------------------------------
 */
-Route::get('logs', 
+Route::get('logs',
 	[\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']
 )->name('logs');

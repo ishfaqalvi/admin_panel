@@ -32,27 +32,35 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <ul class="nav nav-tabs nav-tabs-highlight" role="tablist">
 
-                    @foreach ($groups as $group)
-                        <li class="nav-item" role="presentation">
-                            <a href="#{{ $group->title }}-tab{{ $group->id }}"
-                                class="nav-link {{ $loop->first ? 'active' : '' }}" data-bs-toggle="tab"
-                                aria-selected="true" role="tab">
-                                {{-- <i class="ph-user-circle me-2"></i> --}}
-                                {{ $group->title }}
-                            </a>
-                        </li>
-                    @endforeach
+                @if ($groups && count($groups) > 0)
+                    <ul class="nav nav-tabs nav-tabs-highlight" role="tablist">
+
+                        @foreach ($groups as $group)
+                            <li class="nav-item" role="presentation">
+                                <a href="#{{ $group->title }}-tab{{ $group->id }}"
+                                    class="nav-link {{ $loop->first ? 'active' : '' }}" data-bs-toggle="tab"
+                                    aria-selected="true" role="tab">
+                                    {{-- <i class="ph-user-circle me-2"></i> --}}
+                                    {{ $group->title }}
+                                </a>
+                            </li>
+                        @endforeach
 
 
-                </ul>
+                    </ul>
 
-                <div class="tab-content flex-lg-fill">
+                    <div class="tab-content flex-lg-fill">
 
-                    @include('admin.settings.form')
+                        @include('admin.settings.form')
 
-                </div>
+                    </div>
+                @else
+                    <div class="alert alert-warning border-0 alert-dismissible fade show">
+                        <span class="fw-semibold">
+                            Warning!</span> First create the setting fields.
+                    </div>
+                @endif
 
             </div>
         </div>
@@ -93,8 +101,10 @@
                             success: function(data) {
                                 // Handle the data (e.g., update the DOM)
                                 if (data.success) {
-                                    el.append('<option>' + newval + '</option>')
-                                        .val(newval);
+                                    el.append(
+                                            `<option value="${data.data.id}">${data.data.title}</option>`
+                                            )
+                                        .val(data.data.id);
                                 }
                             },
                             error: function(error) {

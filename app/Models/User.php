@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\ModelFilters\UsersFilter;
+use eloquentFilter\QueryFilter\ModelFilters\Filterable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -15,6 +17,13 @@ class User extends Authenticatable implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use UsersFilter, Filterable;
+
+    private static $whiteListFilter = [
+        'name',
+        'email',
+        'status',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -66,7 +75,7 @@ class User extends Authenticatable implements Auditable
     {
         if ($image) {
             $this->attributes['image'] = uploadFile($image, 'profile', '100', '100');
-        }else {
+        } else {
             unset($this->attributes['image']);
         }
     }

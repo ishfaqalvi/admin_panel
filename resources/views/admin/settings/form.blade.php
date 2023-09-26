@@ -32,7 +32,8 @@
                     </div>
 
                     <div class="col-lg-2 text-center">
-                        <button type="button" class="btn btn-danger delete-btn" data-id="{{ $field->id }}">Delete
+                        <button type="button" class="btn btn-danger delete-btn" data-id="{{ $field->id }}"
+                            {{ settings($field->field_name) != null ? 'disabled' : '' }}>Delete
                             Field <i class="ph-trash ms-2"></i></button>
                     </div>
 

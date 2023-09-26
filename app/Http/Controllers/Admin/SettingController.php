@@ -119,7 +119,7 @@ class SettingController extends Controller
         ]);
     }
 
-        /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -131,11 +131,12 @@ class SettingController extends Controller
             'title' => 'required',
         ]);
 
-        FieldGroup::create($request->all());
+        $data = FieldGroup::create($request->all());
+
         return response()->json([
             'success' => true,
             'message' => "Group created successfully.",
+            'data' => $data,
         ]);
     }
-
 }

@@ -67,9 +67,6 @@ Route::controller(SettingController::class)->prefix('settings')->as('settings.')
 	Route::get('index', 		'index'		)->name('index'		  );
 	Route::get('clear-cache', 	'clearCache')->name('clear-cache' );
 	Route::post('save', 		'save'		)->name('save'		  );
-	Route::post('add-group', 	   'createGroup')->name('create-group');
-	Route::post('fields', 	   'createField')->name('create-field');
-	Route::delete('fields/{id}', 	  'destroyField')->name('delete-field');
 });
 
 /*

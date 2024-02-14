@@ -1,7 +1,7 @@
 @extends('admin.layout.app')
 
 @section('title')
-    {{ ${{modelNameLowerCase}}->name ?? "{{ __('Show') {{modelTitle}}" }}
+    {{ ${{modelNameLowerCase}}->name ?? "Show {{modelTitle}}" }}
 @endsection
 
 @section('header')
